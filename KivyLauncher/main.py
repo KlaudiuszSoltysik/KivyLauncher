@@ -13,9 +13,11 @@ from kivy.metrics import dp
 
 import subprocess
 import shutil
+import os
 
 class KivyLauncherApp(App):
     pass
+
 
 class MyLayout(BoxLayout):        
     def __init__(self, **kwargs):
@@ -65,7 +67,7 @@ class MyLayout(BoxLayout):
 
                 #UNINSTALL BUTTON
                 if(self.launcher_layout.buttons_layout.uninstall_button.clicked):
-                    #shutil.rmtree(i.patch)
+                    shutil.rmtree(i.patch)
                     ########################
                     #REMOVE HERE
                     self.remove_widget(i)
@@ -153,11 +155,9 @@ class GamesLayout(StackLayout):
         self.padding = dp(10)
         self.spacing = dp(10)
         
-        self.pong_game = GameButton("content\pong", text = "PONG")
-        self.tetris_game = GameButton("content\\tetris", text = "TETRIS")
-        
-        self.games.append(self.pong_game)
-        self.games.append(self.tetris_game) 
+        self.files = os.listdir("content")
+        for i in self.files:
+            self.games.append(GameButton("content\\" + i, text = i))
         
         for i in self.games:
             self.add_widget(i)             
