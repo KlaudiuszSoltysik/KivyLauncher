@@ -6,7 +6,6 @@ from kivy.uix.label import Label
 from kivy.uix.widget import Widget
 from kivy.graphics import Rectangle
 from kivy.graphics import Color
-from kivy.properties import ObjectProperty
 from kivy.core.window import Window
 from kivy.clock import Clock
 from kivy.metrics import dp
@@ -67,11 +66,8 @@ class MyLayout(BoxLayout):
 
                 #UNINSTALL BUTTON
                 if(self.launcher_layout.buttons_layout.uninstall_button.clicked):
-                    shutil.rmtree(i.patch)
-                    ########################
-                    #REMOVE HERE
-                    self.remove_widget(i)
-                    ########################
+                    #shutil.rmtree(i.patch)
+                    i.text = "uninstalled"
                     i.clicked = False
                     self.launcher_layout.buttons_layout.uninstall_button.clicked = False
                     self.restore_default()
