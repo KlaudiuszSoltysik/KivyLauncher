@@ -17,7 +17,6 @@ import os
 class KivyLauncherApp(App):
     pass
 
-
 class MyLayout(BoxLayout):        
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -26,12 +25,15 @@ class MyLayout(BoxLayout):
         
         self.title = Label(text = "KivyLauncher",
                            size_hint = (1, 0.15),
-                           color = (1, 0.22, 0.39, 1),
-                           font_size = (0.8*self.height))
+                           color = (0, 0.3, 0.35, 1),
+                           font_size = (0.7*self.height),
+                           font_name = "label_font.ttf",
+                           bold = True)
         self.launcher_layout = LauncherLayout()
         
         self.add_widget(self.title)
         self.add_widget(self.launcher_layout)
+        self.restore_default()
         
         Clock.schedule_interval(self.update, 1/60)
         
@@ -41,9 +43,13 @@ class MyLayout(BoxLayout):
                 
                 with self.canvas.before:
                     Color(1, 1, 1)
-                    self.background = Rectangle(source = i.patch + "/image.jpg", 
-                                                pos = self.pos,
-                                                size = Window.size)
+                    Rectangle(source = i.patch + "/image.jpg", 
+                              pos = self.pos, 
+                              size = self.size)
+                    Color(0, 0, 0, 0.9)
+                    Rectangle(pos = self.pos, 
+                              size = self.size)
+                    
                     
                 for j in self.launcher_layout.games_layout.games:  
                     j.disabled = True
@@ -83,9 +89,6 @@ class MyLayout(BoxLayout):
                     self.restore_default()
                     i.clicked = False
                     
-                self.background.pos = self.pos
-                self.background.size = self.size
-                    
                 
     def restore_default(self):
         self.launcher_layout.games_layout.size_hint_x = 1
@@ -98,8 +101,9 @@ class MyLayout(BoxLayout):
             i.background_color = (1, 1, 1, 1)
             
         with self.canvas.before:
-            Color(0, 0, 0)
-            Rectangle(pos = self.pos, size = Window.size)
+            Color(0.1, 0.1, 0.1)
+            Rectangle(pos = self.pos, 
+                      size = Window.size)
     
           
 class LauncherLayout(BoxLayout):
@@ -166,8 +170,12 @@ class MyButton(Button):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         
-        self.color = (1, 0.22, 0.39, 1)
-        self.background_color = (0.94 ,0.93, 0.93, 1)
+        self.font_size = self.height * 0.25
+        self.font_name = "label_font.ttf"
+        self.background_normal = ""
+        self.background_color = (0.95 ,0.95, 0.95, 0.6)
+        self.color = (0, 0.25, 0.3, 1)
+        self.bold = True
         self.disabled = True
         
     def on_release(self):
@@ -219,11 +227,12 @@ class GameButton(MyButton):
         self.size = (dp(200), dp(200))
         self.font_size = self.width*0.2
         self.color = (1, 1, 1, 1)
-        self.disabled = False
+        self.background_color = (1, 1, 1, 1)
         self.background_normal = patch + "\image.jpg"
         self.background_down = patch + "\image.jpg"
         self.background_disabled_normal = patch +"\image.jpg"
         self.background_disabled_down = patch + "\image.jpg"
+        self.disabled = False
         
         
 KivyLauncherApp().run()
