@@ -13,6 +13,7 @@ from kivy.metrics import dp
 import subprocess
 import shutil
 import os
+import webbrowser
 
 class KivyLauncherApp(App):
     pass
@@ -36,7 +37,8 @@ class MyLayout(BoxLayout):
         self.restore_default()
         
         Clock.schedule_interval(self.update, 1/60)
-        
+    
+      
     def update(self, dt):
         for i in self.launcher_layout.games_layout.games:            
             if(i.clicked):    
@@ -67,7 +69,7 @@ class MyLayout(BoxLayout):
                     
                 #SHOW BUTTON    
                 if(self.launcher_layout.buttons_layout.show_button.clicked):
-                    subprocess.call(['notepad.exe', i.patch + "/main.py"])
+                    webbrowser.open("https://github.com/KlaudiuszSoltysik/KivyLauncher/tree/main/KivyLauncher/" + i.patch)
                     self.launcher_layout.buttons_layout.show_button.clicked = False
 
                 #UNINSTALL BUTTON
@@ -80,7 +82,7 @@ class MyLayout(BoxLayout):
                     
                 #ABOUT BUTTON
                 if(self.launcher_layout.buttons_layout.about_button.clicked):
-                    subprocess.call(['notepad.exe', i.patch + "/about.txt"])
+                    subprocess.call(["notepad.exe", i.patch + "/about.txt"])
                     self.launcher_layout.buttons_layout.about_button.clicked = False
                 
                 #CANCEL BUTTON
