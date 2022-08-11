@@ -28,6 +28,7 @@ class Sudoku(RelativeLayout):
              [0, 0, 0, 0, 0, 0, 0, 0, 0],
              [0, 0, 0, 0, 0, 0, 0, 0, 0]]
     
+    useable_values = numberList=[1, 2, 3, 4, 5, 6, 7, 8, 9]  
     
     seconds = 0
     seconds_passed = 0
@@ -46,65 +47,52 @@ class Sudoku(RelativeLayout):
     
     
     def game_init(self):
+        self.board_init(self.board)
         self.window_init()
-        self.board_init()
     
     
-    def board_init(self):  
-        faulty = True
-        while faulty:  
-            faulty = False
-            for row in range(0, 9):
-                R = int(row/3) * 3
-                for col in range(0, 9):
-                    C = int(col/3) * 3
-                    n = 0
-                    while True:
-                        random_value = random.randint(1, 12)
-                        if self.row_col_loop(row, col, random_value) and self.square_loop(R, C, random_value):
-                            self.board[row][col] = random_value 
-                            break
-                        n += 1
-                        if n > 50:
-                            row = -1
-                            col = -1
-                            board = [[0, 0, 0, 0, 0, 0, 0, 0, 0],
-                                     [0, 0, 0, 0, 0, 0, 0, 0, 0],
-                                     [0, 0, 0, 0, 0, 0, 0, 0, 0],
-                                     [0, 0, 0, 0, 0, 0, 0, 0, 0],
-                                     [0, 0, 0, 0, 0, 0, 0, 0, 0],
-                                     [0, 0, 0, 0, 0, 0, 0, 0, 0],
-                                     [0, 0, 0, 0, 0, 0, 0, 0, 0],
-                                     [0, 0, 0, 0, 0, 0, 0, 0, 0],
-                                     [0, 0, 0, 0, 0, 0, 0, 0, 0]]
-                            break
-            for i in range(0, 9):
-                for j in range(0, 9):       
-                    if self.board[i][j] == 0:
-                        faulty = True
-                        break
-            
+    def board_init(self, board):
+        for i in range(0, 81):
+            row = i//9
+            col = i%9
+            if board[row][col] == 0:
+                random.shuffle(self.useable_values)      
+                for value in self.useable_values:
+                    if self.value_check(row, col, value):
+                        board[row][col] = value
+                        if self.is_full(board):
+                            return True
+                        else:
+                            if self.board_init(board):
+                                return True
+                break
+        board[row][col] = 0             
 
-                
+
+    def is_full(self, board):
+        for row in range(0, 9):
+            for col in range(0, 9):
+                if board[row][col] == 0:
+                    return False
+        return True
+                    
+                    
+    def value_check(self, row, col, value):
+        R = int(row/3) * 3
+        C = int(col/3) * 3
         
-    
-    def row_col_loop(self, row, col, random_value):
         for i in range(0, 9):
-            if self.board[i][col] == random_value:
+            if self.board[i][col] == value:
                 return False
             for j in range(0, 9):
-                if self.board[row][j] == random_value:
+                if self.board[row][j] == value:
                     return False
-        return True
-    
-    
-    def square_loop(self, R, C, random_value):
         for i in range(R, R + 3):
             for j in range(C, C + 3):
-                if random_value == self.board[i][j]:
+                if value == self.board[i][j]:
                     return False
         return True
-        
+
         
     def window_init(self):
         Window.size = (500, 600)
