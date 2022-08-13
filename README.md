@@ -6,6 +6,6 @@ It searches the patch for mini-games that I also wrote. Using the launcher, you 
 
 Curently aviable/in progress games:
 
-Sudoku - made using backtracking algorithm, you can choose between three game difficulties. By pressing space you can watch game playing by itself in real time.
+Sudoku (curently unplayable) - made using backtracking algorithm, you can choose between three game difficulties. By pressing space you can watch game playing by itself in real time. You enter numbers by pressing a key on your keyboard and then pressing right grid on screen.
 
 Tetris - the game everyone knows, no other features
