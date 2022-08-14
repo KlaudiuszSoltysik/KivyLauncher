@@ -1,68 +1,48 @@
-#dodać ekran końcowy, wygenerować plansze, dodać rozwiązywanie planszy
+#generowanie poprawnych tablic, autorozwiązanie, ekran końcowy
 from kivy.app import App
 from kivy.uix.button import Button
-from kivy.uix.togglebutton import ToggleButton
 from kivy.uix.label import Label
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.relativelayout import RelativeLayout
 from kivy.uix.gridlayout import GridLayout
-from kivy.uix.anchorlayout import AnchorLayout
-from kivy.graphics import Rectangle
-from kivy.graphics import Color
-from kivy.graphics.vertex_instructions import Line
-from kivy.properties import NumericProperty, ObjectProperty, StringProperty
-from kivy.metrics import dp
 from kivy.core.window import Window
 from kivy.clock import Clock
-from kivy.config import Config
 
 import random
-
+import copy
+import time
 
 class KivySudokuApp(App):
     def build(self):
         return Sudoku()
 
 
-class SmallGrid(GridLayout):
-    buttons = []
-    
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-
-        for i in range(0, 9):
-            obj = SudokuButton()
-            self.buttons.append(obj)
-            self.add_widget(obj)
-
-
-class BigGrid(GridLayout): 
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-
-        self.grid1 = SmallGrid() 
-        self.grid2 = SmallGrid() 
-        self.grid3 = SmallGrid() 
-        self.grid4 = SmallGrid() 
-        self.grid5 = SmallGrid() 
-        self.grid6 = SmallGrid() 
-        self.grid7 = SmallGrid() 
-        self.grid8 = SmallGrid() 
-        self.grid9 = SmallGrid() 
-        
-        self.add_widget(self.grid1)
-        self.add_widget(self.grid2)
-        self.add_widget(self.grid3)
-        self.add_widget(self.grid4)
-        self.add_widget(self.grid5)
-        self.add_widget(self.grid6)
-        self.add_widget(self.grid7)
-        self.add_widget(self.grid8)
-        self.add_widget(self.grid9)
-        
-
 class MenuWidget(RelativeLayout):
     pass   
+
+
+class SmallGrid(GridLayout):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        
+        self.buttons = []
+
+        for i in range(9):
+            obj = SudokuButton()
+            self.add_widget(obj)  
+            self.buttons.append(obj) 
+
+
+class BigGrid(GridLayout):    
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        
+        self.grids = []
+
+        for i in range(9):
+            obj = SmallGrid()
+            self.add_widget(obj)  
+            self.grids.append(obj)    
     
         
 class Sudoku(BoxLayout):
@@ -85,15 +65,13 @@ class Sudoku(BoxLayout):
                     [0, 0, 0, 0, 0, 0, 0, 0, 0],
                     [0, 0, 0, 0, 0, 0, 0, 0, 0],
                     [0, 0, 0, 0, 0, 0, 0, 0, 0]]
-    
-    
+
     useable_values = numberList=[1, 2, 3, 4, 5, 6, 7, 8, 9]  
     
     seconds_passed = 0
     minutes_passed = 0
     
     last_key = ""
-    
     
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -119,7 +97,10 @@ class Sudoku(BoxLayout):
                            bold = True,
                            size_hint = (1, 0.05))
         
+        self.grid = BigGrid(pos_hint = {"center_x": 0.5, "center_y:": 0.5})
+        
         self.menu = MenuWidget()
+        
         self.add_widget(self.menu)
         
         self._keyboard = Window.request_keyboard(self.keyboard_closed, self)
@@ -132,6 +113,10 @@ class Sudoku(BoxLayout):
         for i in range(1, 10):
             if keycode[1] == str(i):
                 self.last_key = str(i)
+        if keycode[1] == "backspace":
+            self.last_key = ""
+        if keycode[1] == "spacebar":
+            self.solve_player_board()
         return True
     
     
@@ -141,13 +126,13 @@ class Sudoku(BoxLayout):
     
     
     def original_board_init(self):
-        for i in range(0, 81):
+        for i in range(81):
             row = int(i/9)
             col = i%9
             if self.original_board[row][col] == 0:
                 random.shuffle(self.useable_values)      
                 for value in self.useable_values:
-                    if self.value_check(row, col, value):
+                    if self.value_check(row, col, value, self.original_board):
                         self.original_board[row][col] = value
                         if self.is_full(self.original_board):
                             return True
@@ -159,69 +144,85 @@ class Sudoku(BoxLayout):
         
     
     def player_board_init(self, to_del):
-        self.player_board = self.original_board
+        self.player_board = copy.deepcopy(self.original_board)
         
-        to_remove = random.sample(range(0, 81), to_del)
+        to_remove = random.sample(range(81), to_del)
         
         for i in to_remove:
             row = int(i/9)
             col = i%9  
             self.player_board[row][col] = ""
         
-        for i in range(0, 9):
-            for j in range(0, 9):
-                self.grid.grid1.buttons[j].text = str(self.player_board[i][j])
-#                if self.grid.grid1.buttons[j].text == "":
-#                    self.grid.grid1.buttons[j].disabled = True
+        self.print_board(1)
+            
+            
+    def print_board(self, dt):    
+        for i in range(9):
+            for j in range(9):
+                self.grid.grids[i].buttons[j].text = str(self.player_board[i][j])
+                if self.grid.grids[i].buttons[j].text != "":
+                    self.grid.grids[i].buttons[j].locked = True
+                    self.grid.grids[i].buttons[j].background_color = (0.15, 0.15, 0.15, 1)           
 
 
-    def solve_board(self):
-        for i in range(0, 81):
+    def solve_board(self, board):
+        for i in range(81):
             row = int(i/9)
             col = i%9
-            if self.original_board[row][col] == 0:
-                for value in range(1,10):
-                    if self.value_check(row, col, value):
-                        self.original_board[row][col] == value
+            if board[row][col] == "":
+                for value in range(1, 10):
+                    if self.value_check(row, col, value, board):
+                        board[row][col] == value
                         self.solve_board()
-                        self.original_board[row][col] = 0
-                return False     
+                        board[row][col] = ""
+                return False    
+            return board
+    
+    
+    def solve_player_board(self):
+        for i in range(81):
+            row = int(i/9)
+            col = i%9
+            self.player_board[row][col] = self.original_board[row][col]
+            Clock.schedule_once(self.print_board, 0.5)
             
 
     def is_full(self, board):
-        for row in range(0, 9):
-            for col in range(0, 9):
+        for row in range(9):
+            for col in range(9):
                 if board[row][col] == 0:
                     return False
         return True
                     
                     
-    def value_check(self, row, col, value):
+    def value_check(self, row, col, value, board):
         R = int(row/3) * 3
         C = int(col/3) * 3
         
-        for i in range(0, 9):
-            if self.original_board[i][col] == value:
+        for i in range(9):
+            if board[i][col] == value:
                 return False
-            for j in range(0, 9):
-                if self.original_board[row][j] == value:
+            for j in range(9):
+                if board[row][j] == value:
                     return False
         for i in range(R, R + 3):
             for j in range(C, C + 3):
-                if value == self.original_board[i][j]:
+                if value == board[i][j]:
                     return False
         return True
 
                 
     def update(self, dt):
         self.seconds_passed += dt
+        
         self.number.text = "Enter number: " + str(self.last_key)
         
-#        for i in range(0, 9):
-#            for j in range(0, 9):
-#                self.grid.big_grid.small_grids[i].buttons[j].last_key = self.last_key
+        for i in range(9):
+            for j in range(9):
+                self.grid.grids[i].buttons[j].last_key = self.last_key
+                self.player_board[i][j] = self.last_key
          
-        self.update_time()
+        self.update_time()  
         
         
     def update_time(self):
@@ -236,20 +237,17 @@ class Sudoku(BoxLayout):
         
         
     def easy_button(self):
-        self.switch_menu()
-        self.original_board_init()  
+        self.switch_menu() 
         self.player_board_init(31)    
         
         
     def medium_button(self):
         self.switch_menu()
-        self.original_board_init()
         self.player_board_init(51) 
         
         
     def hard_button(self):
         self.switch_menu()
-        self.original_board_init()
         self.player_board_init(61) 
         
     
@@ -257,10 +255,9 @@ class Sudoku(BoxLayout):
         self.seconds_passed = 0
         self.minutes_passed = 0
         
-        self.remove_widget(self.menu)
+        self.original_board_init()
         
-        self.grid = BigGrid()
-        self.grid.pos_hint = {"center_x": 0.5, "center_y:": 0.5}
+        self.remove_widget(self.menu)
         
         self.add_widget(self.title)
         self.add_widget(self.timer)
@@ -270,6 +267,7 @@ class Sudoku(BoxLayout):
               
 class SudokuButton(Button):
     last_key = ""
+    locked = False
     
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -279,7 +277,7 @@ class SudokuButton(Button):
     
         
     def on_press(self):
-        if self.last_key != "":
+        if not self.locked:
             self.text = self.last_key
         return super().on_press()
 

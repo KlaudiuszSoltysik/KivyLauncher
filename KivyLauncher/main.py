@@ -132,11 +132,11 @@ class ButtonsLayout(BoxLayout):
         self.padding = dp(10)
         self.size_hint_x = 0.3
         
-        self.play_button = PlayButton()
-        self.show_button = ShowButton()
-        self.uninstall_button = UninstallButton()
-        self.about_button = AboutButton()
-        self.cancel_button = CancelButton()
+        self.play_button = MyButton(text = "play")
+        self.show_button = MyButton(text = "show .py")
+        self.uninstall_button = MyButton(text = "uninstall")
+        self.about_button = MyButton(text = "about")
+        self.cancel_button = MyButton(text = "cancel")
         
         self.buttons.append(self.play_button)
         self.buttons.append(self.show_button)
@@ -183,41 +183,6 @@ class MyButton(Button):
     def on_release(self):
         self.clicked = True
         return super().on_release()
-
-            
-class PlayButton(MyButton):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        
-        self.text = "play"
-
-        
-class ShowButton(MyButton):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        
-        self.text = "show .py"
-
-        
-class UninstallButton(MyButton):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        
-        self.text = "uninstall"
-        
-
-class AboutButton(MyButton):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        
-        self.text = "about"
-        
-
-class CancelButton(MyButton):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        
-        self.text = "cancel"
 
 
 class GameButton(MyButton):        
