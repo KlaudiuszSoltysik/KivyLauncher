@@ -48,7 +48,7 @@ class MyLayout(BoxLayout):
                     Rectangle(source = i.patch + "/image.jpg", 
                               pos = self.pos, 
                               size = self.size)
-                    Color(0, 0, 0, 0.9)
+                    Color(0, 0, 0, 0.7)
                     Rectangle(pos = self.pos, 
                               size = self.size)
                     
