@@ -4,9 +4,9 @@ Simple program made in Python with Kivy.
 
 It searches the patch for mini-games that I also wrote. Using the launcher, you can select a game or app, play it, uninstall it, view the source code and read the manual. 
 
-Curently aviable/in progress/future apps:
+Curently aviable/in progress/future apps are in the same repository in "content" directory:
 
-KivySudoku - made using backtracking algorithm, you can choose between three game difficulties. By pressing spacebar you can full your grid. You enter numbers by pressing a key on your keyboard and then pressing right cell on screen. To undo your numbers press backspace and press cell.
+KivySudoku - made using backtracking algorithm, you can choose between three game difficulties. By pressing spacebar and then pressing cells, you can insert right numbers. You enter numbers by pressing a key on your keyboard and then pressing right cell on screen. To undo your numbers press backspace and press cell.
 
 KivyTetris - my version of the game everyone knows, no other features. You can play with arrows (left, right, up to rotate, down for faster fall)
 
