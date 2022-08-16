@@ -40,18 +40,14 @@ class MyLayout(BoxLayout):
     
       
     def update(self, dt):
+        #ABOUT BUTTON
+        self.launcher_layout.buttons_layout.about_button.disabled = False
+        if(self.launcher_layout.buttons_layout.about_button.clicked):
+            webbrowser.open("https://github.com/KlaudiuszSoltysik/KivyLauncher-app-and-games-/blob/main/README.md")
+            self.launcher_layout.buttons_layout.about_button.clicked = False
+                    
         for i in self.launcher_layout.games_layout.games:            
             if(i.clicked):    
-                
-                with self.canvas.before:
-                    Color(1, 1, 1)
-                    Rectangle(source = i.patch + "/image.jpg", 
-                              pos = self.pos, 
-                              size = self.size)
-                    Color(0, 0, 0, 0.7)
-                    Rectangle(pos = self.pos, 
-                              size = self.size)
-                    
                     
                 for j in self.launcher_layout.games_layout.games:  
                     j.disabled = True
@@ -62,7 +58,7 @@ class MyLayout(BoxLayout):
                 
                 #PLAY BUTTON
                 if(self.launcher_layout.buttons_layout.play_button.clicked):
-                    exec(open(i.patch + "/main.py").read())
+                    exec(open(i.patch + "\main.py").read())
                     i.clicked = False
                     self.launcher_layout.buttons_layout.play_button.clicked = False
                     self.restore_default()
@@ -74,16 +70,12 @@ class MyLayout(BoxLayout):
 
                 #UNINSTALL BUTTON
                 if(self.launcher_layout.buttons_layout.uninstall_button.clicked):
-                    #shutil.rmtree(i.patch)
+                    shutil.rmtree(i.patch)
                     i.text = "uninstalled"
+                    i.font_size = i.font_size/2
                     i.clicked = False
                     self.launcher_layout.buttons_layout.uninstall_button.clicked = False
                     self.restore_default()
-                    
-                #ABOUT BUTTON
-                if(self.launcher_layout.buttons_layout.about_button.clicked):
-                    webbrowser.open("https://github.com/KlaudiuszSoltysik/KivyLauncher-app-games-/tree/main/KivyLauncher/" + i.patch)
-                    self.launcher_layout.buttons_layout.about_button.clicked = False
                 
                 #CANCEL BUTTON
                 if(self.launcher_layout.buttons_layout.cancel_button.clicked):
@@ -135,14 +127,14 @@ class ButtonsLayout(BoxLayout):
         self.play_button = MyButton(text = "play")
         self.show_button = MyButton(text = "show .py")
         self.uninstall_button = MyButton(text = "uninstall")
-        self.about_button = MyButton(text = "about")
         self.cancel_button = MyButton(text = "cancel")
+        self.about_button = MyButton(text = "about")
         
         self.buttons.append(self.play_button)
         self.buttons.append(self.show_button)
         self.buttons.append(self.uninstall_button)
-        self.buttons.append(self.about_button)
         self.buttons.append(self.cancel_button)
+        self.buttons.append(self.about_button)
         
         for i in self.buttons:
             self.add_widget(i)
