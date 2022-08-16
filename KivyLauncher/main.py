@@ -69,7 +69,7 @@ class MyLayout(BoxLayout):
                     
                 #SHOW BUTTON    
                 if(self.launcher_layout.buttons_layout.show_button.clicked):
-                    webbrowser.open("https://github.com/KlaudiuszSoltysik/KivyLauncher/tree/main/KivyLauncher/" + i.patch)
+                    subprocess.call(["notepad.exe", i.patch + "/main.py"])
                     self.launcher_layout.buttons_layout.show_button.clicked = False
 
                 #UNINSTALL BUTTON
@@ -82,7 +82,7 @@ class MyLayout(BoxLayout):
                     
                 #ABOUT BUTTON
                 if(self.launcher_layout.buttons_layout.about_button.clicked):
-                    subprocess.call(["notepad.exe", i.patch + "/about.txt"])
+                    webbrowser.open("https://github.com/KlaudiuszSoltysik/KivyLauncher-app-games-/tree/main/KivyLauncher/" + i.patch)
                     self.launcher_layout.buttons_layout.about_button.clicked = False
                 
                 #CANCEL BUTTON
@@ -157,9 +157,9 @@ class GamesLayout(StackLayout):
         self.padding = dp(10)
         self.spacing = dp(10)
         
-        self.files = os.listdir("content")
+        self.files = os.listdir("games")
         for i in self.files:
-            self.games.append(GameButton("content\\" + i, text = i))
+            self.games.append(GameButton("games\\" + i, text = i))
         
         for i in self.games:
             self.add_widget(i)             
