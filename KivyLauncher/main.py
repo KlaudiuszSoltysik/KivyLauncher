@@ -18,6 +18,7 @@ import webbrowser
 class KivyLauncherApp(App):
     pass
 
+
 class MyLayout(BoxLayout):        
     def __init__(self, **kwargs):
         super().__init__(**kwargs)

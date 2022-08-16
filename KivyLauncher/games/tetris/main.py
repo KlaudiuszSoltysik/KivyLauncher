@@ -3,7 +3,6 @@ from kivy.uix.button import Button
 from kivy.uix.label import Label
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.gridlayout import GridLayout
-from kivy.uix.relativelayout import RelativeLayout
 from kivy.core.window import Window
 from kivy.clock import Clock
 from kivy.graphics.context_instructions import Color
@@ -11,26 +10,39 @@ from kivy.graphics.vertex_instructions import Line, Rectangle
 from kivy.properties import ObjectProperty
 
 import random
+import copy
 
 class KivyTetrisApp(App):
     pass
 
 
-class MenuWidget(RelativeLayout):
-    pass  
+class GridButton(Button):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        
+        self.background_color = (0.2, 0.2, 0.2, 1)
+        self.disabled = True
+        self.background_disabled_normal = ""
+            
 
-
-class TetrisWidget(GridLayout):
-    squares = []
-    
+class TetrisWidget(GridLayout):    
     def __init__(self, **kwargs):
         super().__init__(**kwargs) 
         
+        self.shapes = []
+        
         for i in range(200):
-            obj = Button(background_color = (0.2, 0.2, 0.2, 1),
-                         background_normal = "")
-            self.squares.append(obj)
+            obj = GridButton()
             self.add_widget(obj)
+            
+        self.tetris_canvas = self.canvas
+        with self.tetris_canvas:
+            obj = Shapes()
+            
+            obj.pos_x = 4
+            obj.pos_y = 4
+            
+            self.shapes.append(obj)
             
     
 class Panel(BoxLayout):
@@ -81,6 +93,16 @@ class Panel(BoxLayout):
         self.add_widget(self.points)       
         
         
+class Shapes(Line):
+    pos_x = 0
+    pos_y = 0
+    
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        
+        self.cap = "none"
+    
+
 class App(BoxLayout):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -96,7 +118,7 @@ class App(BoxLayout):
         self.add_widget(self.tetris)
         self.add_widget(self.panel)
         
-        Clock.schedule_interval(self.update, 1/60)
+        Clock.schedule_interval(self.update, 1/2)
 
 
     def on_key_down(self, keyboard, keycode, text, modifiers):
@@ -104,6 +126,8 @@ class App(BoxLayout):
             self.last_key = self.left_arrow
         if keycode[1] == "right":
             self.last_key = self.right_arrow
+        if keycode[1] == "up":
+            self.last_key = self.up_arrow
         if keycode[1] == "down":
             self.last_key = self.down_arrow
         return True
@@ -113,9 +137,42 @@ class App(BoxLayout):
         self._keyboard.unbind(on_key_down = self.on_key_down)
         self._keyboard = None
     
+    
+    def left_arrow(self):
+        with self.tetris.tetris_canvas:
+            obj = Shapes()
+            
+            obj.pos_x = 6
+            obj.pos_y = 4
+            
+            self.tetris.shapes.append(obj)
+            
+    
+    
+    def right_arrow(self):
+        pass
+    
+    
+    def up_arrow(self):
+        pass
+    
+    
+    def down_arrow(self):
+        pass
+    
 
     def update(self, dt):
-        pass
-
+        self.update_shapes()        
+    
+    
+    def update_shapes(self):
+        x_offset = self.tetris.width/20
+        unit = self.tetris.width/10
+        
+        for i in self.tetris.shapes:
+            i.points = (unit * i.pos_x - x_offset, 0,
+                        unit * i.pos_x - x_offset, unit * i.pos_y)
+            i.width = self.tetris.width * 0.1 /2
+        
 
 KivyTetrisApp().run()
