@@ -129,7 +129,7 @@ class Sudoku(BoxLayout):
         self.add_widget(self.menu)
         
         self._keyboard = Window.request_keyboard(self.keyboard_closed, self)
-        self._keyboard.bind(on_key_down=self.on_key_down)
+        self._keyboard.bind(on_key_down = self.on_key_down)
         
         Clock.schedule_interval(self.update, 1/4)
 
