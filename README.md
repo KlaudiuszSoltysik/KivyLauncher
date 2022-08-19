@@ -21,6 +21,6 @@ KivyTetris - my version of the game everyone knows, no other features. You can p
 Gameplay:
 
 
-KivyColor - an app you can use to pick colors that match with each other. You can lock the colors you like with spacebar and choose how much colors you want to pick with keyboard. Colors aren't randomized, I used a simple AI to catch the colors you don't like, so the algorithm can avoid them. You can reset the AI with backspace.
+KivyColor - an app you can use to pick colors that match with each other (based on "theory of colors"). You can lock the colors you like with spacebar and choose how much colors you want to pick with keyboard. Colors aren't randomized, I used a simple AI to catch the colors you don't like, so the algorithm can avoid them. You can reset the AI with backspace.
 
 Gameplay:
