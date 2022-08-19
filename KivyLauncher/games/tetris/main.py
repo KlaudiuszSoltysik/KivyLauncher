@@ -155,13 +155,13 @@ class TetrisWidget(GridLayout):
                 x = 2
             
             self.shapes[-1][0].position_x = x
-            self.shapes[-1][0].position_y = y
+            self.shapes[-1][0].position_y = y - 1
             self.shapes[-1][1].position_x = x - 1
-            self.shapes[-1][1].position_y = y
+            self.shapes[-1][1].position_y = y - 1
             self.shapes[-1][2].position_x = x - 2
-            self.shapes[-1][2].position_y = y 
+            self.shapes[-1][2].position_y = y - 1
             self.shapes[-1][3].position_x = x
-            self.shapes[-1][3].position_y = y + 1
+            self.shapes[-1][3].position_y = y
             
             self.shapes[-1][0].version = 3
             
@@ -173,17 +173,233 @@ class TetrisWidget(GridLayout):
                 x = 8
             
             self.shapes[-1][0].position_x = x
+            self.shapes[-1][0].position_y = y - 2
+            self.shapes[-1][1].position_x = x
+            self.shapes[-1][1].position_y = y - 1
+            self.shapes[-1][2].position_x = x
+            self.shapes[-1][2].position_y = y 
+            self.shapes[-1][3].position_x = x + 1
+            self.shapes[-1][3].position_y = y - 2
+            
+            self.shapes[-1][0].version = 4
+            
+        elif self.shapes[-1][0].brick == "L" and self.shapes[-1][0].version == 4:
+            x = self.shapes[-1][0].position_x
+            y = self.shapes[-1][0].position_y
+            
+            self.shapes[-1][0].position_x = x
+            self.shapes[-1][0].position_y = y + 2
+            self.shapes[-1][1].position_x = x + 1
+            self.shapes[-1][1].position_y = y + 2
+            self.shapes[-1][2].position_x = x + 1
+            self.shapes[-1][2].position_y = y + 1
+            self.shapes[-1][3].position_x = x + 1
+            self.shapes[-1][3].position_y = y 
+            
+            self.shapes[-1][0].version = 1
+        
+        elif self.shapes[-1][0].brick == "J" and self.shapes[-1][0].version == 1:
+            x = self.shapes[-1][0].position_x
+            y = self.shapes[-1][0].position_y
+            
+            if x > 7:
+                x = 7
+            
+            self.shapes[-1][0].position_x = x
+            self.shapes[-1][0].position_y = y + 1
+            self.shapes[-1][1].position_x = x
+            self.shapes[-1][1].position_y = y 
+            self.shapes[-1][2].position_x = x + 1
+            self.shapes[-1][2].position_y = y
+            self.shapes[-1][3].position_x = x + 2
+            self.shapes[-1][3].position_y = y
+            
+            self.shapes[-1][0].version = 2
+
+        elif self.shapes[-1][0].brick == "J" and self.shapes[-1][0].version == 2:
+            x = self.shapes[-1][0].position_x
+            y = self.shapes[-1][0].position_y
+            
+            self.shapes[-1][0].position_x = x
+            self.shapes[-1][0].position_y = y - 1
+            self.shapes[-1][1].position_x = x
+            self.shapes[-1][1].position_y = y 
+            self.shapes[-1][2].position_x = x
+            self.shapes[-1][2].position_y = y + 1
+            self.shapes[-1][3].position_x = x + 1
+            self.shapes[-1][3].position_y = y + 1
+            
+            self.shapes[-1][0].version = 3
+            
+        elif self.shapes[-1][0].brick == "J" and self.shapes[-1][0].version == 3:
+            x = self.shapes[-1][0].position_x
+            y = self.shapes[-1][0].position_y
+            
+            if x < 1:
+                x = 1
+            
+            self.shapes[-1][0].position_x = x + 1
+            self.shapes[-1][0].position_y = y
+            self.shapes[-1][1].position_x = x + 1
+            self.shapes[-1][1].position_y = y + 1 
+            self.shapes[-1][2].position_x = x
+            self.shapes[-1][2].position_y = y + 1
+            self.shapes[-1][3].position_x = x - 1
+            self.shapes[-1][3].position_y = y + 1
+            
+            self.shapes[-1][0].version = 4
+
+        elif self.shapes[-1][0].brick == "J" and self.shapes[-1][0].version == 4:
+            x = self.shapes[-1][0].position_x
+            y = self.shapes[-1][0].position_y
+            
+            if x < 1:
+                x = 1
+            
+            self.shapes[-1][0].position_x = x - 1
             self.shapes[-1][0].position_y = y
             self.shapes[-1][1].position_x = x
-            self.shapes[-1][1].position_y = y + 1
+            self.shapes[-1][1].position_y = y 
             self.shapes[-1][2].position_x = x
-            self.shapes[-1][2].position_y = y + 2 
+            self.shapes[-1][2].position_y = y + 1
+            self.shapes[-1][3].position_x = x
+            self.shapes[-1][3].position_y = y + 2
+            
+            self.shapes[-1][0].version = 1
+        
+        elif self.shapes[-1][0].brick == "Z" and self.shapes[-1][0].version == 1:
+            x = self.shapes[-1][0].position_x
+            y = self.shapes[-1][0].position_y
+            
+            self.shapes[-1][0].position_x = x 
+            self.shapes[-1][0].position_y = y + 2
+            self.shapes[-1][1].position_x = x
+            self.shapes[-1][1].position_y = y + 1 
+            self.shapes[-1][2].position_x = x + 1
+            self.shapes[-1][2].position_y = y + 1
             self.shapes[-1][3].position_x = x + 1
             self.shapes[-1][3].position_y = y
             
+            self.shapes[-1][0].version = 2
+            
+        elif self.shapes[-1][0].brick == "Z" and self.shapes[-1][0].version == 2:
+            x = self.shapes[-1][0].position_x
+            y = self.shapes[-1][0].position_y
+            
+            if x < 1:
+                x = 1
+            
+            self.shapes[-1][0].position_x = x - 1
+            self.shapes[-1][0].position_y = y - 2
+            self.shapes[-1][1].position_x = x
+            self.shapes[-1][1].position_y = y - 2
+            self.shapes[-1][2].position_x = x
+            self.shapes[-1][2].position_y = y - 1
+            self.shapes[-1][3].position_x = x + 1
+            self.shapes[-1][3].position_y = y - 1
+            
             self.shapes[-1][0].version = 1
-    
-    
+        
+        elif self.shapes[-1][0].brick == "S" and self.shapes[-1][0].version == 1:
+            x = self.shapes[-1][0].position_x
+            y = self.shapes[-1][0].position_y
+            
+            if x < 1:
+                x = 1
+            
+            self.shapes[-1][0].position_x = x - 1
+            self.shapes[-1][0].position_y = y + 1
+            self.shapes[-1][1].position_x = x
+            self.shapes[-1][1].position_y = y + 1 
+            self.shapes[-1][2].position_x = x
+            self.shapes[-1][2].position_y = y
+            self.shapes[-1][3].position_x = x + 1
+            self.shapes[-1][3].position_y = y
+            
+            self.shapes[-1][0].version = 2
+        
+        elif self.shapes[-1][0].brick == "S" and self.shapes[-1][0].version == 2:
+            x = self.shapes[-1][0].position_x
+            y = self.shapes[-1][0].position_y
+            
+            self.shapes[-1][0].position_x = x
+            self.shapes[-1][0].position_y = y - 1
+            self.shapes[-1][1].position_x = x
+            self.shapes[-1][1].position_y = y 
+            self.shapes[-1][2].position_x = x + 1
+            self.shapes[-1][2].position_y = y
+            self.shapes[-1][3].position_x = x + 1
+            self.shapes[-1][3].position_y = y + 1
+            
+            self.shapes[-1][0].version = 1
+        
+        elif self.shapes[-1][0].brick == "E" and self.shapes[-1][0].version == 1:
+            x = self.shapes[-1][0].position_x
+            y = self.shapes[-1][0].position_y
+            
+            if x < 1:
+                x = 1
+            
+            self.shapes[-1][0].position_x = x
+            self.shapes[-1][0].position_y = y
+            self.shapes[-1][1].position_x = x - 1
+            self.shapes[-1][1].position_y = y + 1 
+            self.shapes[-1][2].position_x = x
+            self.shapes[-1][2].position_y = y + 1
+            self.shapes[-1][3].position_x = x + 1
+            self.shapes[-1][3].position_y = y + 1
+            
+            self.shapes[-1][0].version = 2
+        
+        elif self.shapes[-1][0].brick == "E" and self.shapes[-1][0].version == 2:
+            x = self.shapes[-1][0].position_x
+            y = self.shapes[-1][0].position_y
+            
+            self.shapes[-1][0].position_x = x
+            self.shapes[-1][0].position_y = y
+            self.shapes[-1][1].position_x = x + 1
+            self.shapes[-1][1].position_y = y - 1
+            self.shapes[-1][2].position_x = x + 1
+            self.shapes[-1][2].position_y = y
+            self.shapes[-1][3].position_x = x + 1
+            self.shapes[-1][3].position_y = y + 1
+            
+            self.shapes[-1][0].version = 3
+            
+        elif self.shapes[-1][0].brick == "E" and self.shapes[-1][0].version == 3:
+            x = self.shapes[-1][0].position_x
+            y = self.shapes[-1][0].position_y
+            
+            if x < 1:
+                x = 1
+            
+            self.shapes[-1][0].position_x = x
+            self.shapes[-1][0].position_y = y
+            self.shapes[-1][1].position_x = x - 1
+            self.shapes[-1][1].position_y = y - 1 
+            self.shapes[-1][2].position_x = x 
+            self.shapes[-1][2].position_y = y - 1
+            self.shapes[-1][3].position_x = x + 1
+            self.shapes[-1][3].position_y = y - 1
+            
+            self.shapes[-1][0].version = 4
+            
+        elif self.shapes[-1][0].brick == "E" and self.shapes[-1][0].version == 4:
+            x = self.shapes[-1][0].position_x
+            y = self.shapes[-1][0].position_y
+            
+            self.shapes[-1][0].position_x = x
+            self.shapes[-1][0].position_y = y
+            self.shapes[-1][1].position_x = x - 1
+            self.shapes[-1][1].position_y = y - 1 
+            self.shapes[-1][2].position_x = x - 1
+            self.shapes[-1][2].position_y = y
+            self.shapes[-1][3].position_x = x - 1
+            self.shapes[-1][3].position_y = y + 1
+            
+            self.shapes[-1][0].version = 1
+      
+        
     def fall(self, dt):
         self.time += dt
         
