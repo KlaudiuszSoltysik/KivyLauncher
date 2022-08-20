@@ -1,8 +1,10 @@
+#wyświetlać następny klocek, naprawić kolizje z dołem
 from kivy.app import App
 from kivy.uix.button import Button
 from kivy.uix.label import Label
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.gridlayout import GridLayout
+from kivy.uix.relativelayout import RelativeLayout
 from kivy.core.window import Window
 from kivy.clock import Clock
 from kivy.graphics.context_instructions import Color
@@ -12,6 +14,10 @@ import random
 
 class KivyTetrisApp(App):
     pass
+
+
+class GameOver(RelativeLayout):
+    pass   
 
 
 class GridButton(Button):
@@ -30,39 +36,35 @@ class Panel(BoxLayout):
         self.orientation = "vertical"
         
         self.label1 = Label(text = "KivyTetris",
-                            font_size = self.height * 0.5,
+                            font_size = self.height / 2,
                             font_name = "label_font.ttf",
                             color = (0, 0.25, 0.3, 1),
                             bold = True,
-                            size_hint = (1, 0.5))
+                            size_hint = (1, 2))
         
         self.label2 = Label(text = "Next:",
-                            font_size = self.height * 0.3,
+                            font_size = self.height / 2,
                             font_name = "label_font.ttf",
                             color = (0, 0.25, 0.3, 1),
                             bold = True,
-                            size_hint = (1, 0.3))
+                            size_hint = (1, 1))
         
         self.block = Label(text = "PLACEHOLDER",
-                            font_size = self.height * 0.5,
-                            font_name = "label_font.ttf",
-                            color = (0, 0.25, 0.3, 1),
-                            bold = True,
-                            size_hint = (1, 0.5))
+                            size_hint = (1, 2))
         
         self.label3 = Label(text = "Points:",
-                            font_size = self.height * 0.3,
+                            font_size = self.height / 2,
                             font_name = "label_font.ttf",
                             color = (0, 0.25, 0.3, 1),
                             bold = True,
-                            size_hint = (1, 0.3))
+                            size_hint = (1, 1))
         
         self.points = Label(text = "pts",
-                            font_size = self.height * 0.5,
+                            font_size = self.height / 2,
                             font_name = "label_font.ttf",
                             color = (0, 0.25, 0.3, 1),
                             bold = True,
-                            size_hint = (1, 0.5))
+                            size_hint = (1, 2))
         
         self.add_widget(self.label1)
         self.add_widget(self.label2)
@@ -136,14 +138,14 @@ class TetrisWidget(GridLayout):
             if x > 6:
                 x = 6
             
-            self.shapes[-1][0].position_x = x + 1
+            self.shapes[-1][0].position_x = x 
             self.shapes[-1][0].position_y = y + 1
             self.shapes[-1][1].position_x = x + 1
-            self.shapes[-1][1].position_y = y
+            self.shapes[-1][1].position_y = y + 1
             self.shapes[-1][2].position_x = x + 2
             self.shapes[-1][2].position_y = y + 1
-            self.shapes[-1][3].position_x = x + 3
-            self.shapes[-1][3].position_y = y + 1
+            self.shapes[-1][3].position_x = x 
+            self.shapes[-1][3].position_y = y
             
             self.shapes[-1][0].version = 2
             
@@ -151,16 +153,13 @@ class TetrisWidget(GridLayout):
             x = self.shapes[-1][0].position_x
             y = self.shapes[-1][0].position_y
             
-            if x < 2:
-                x = 2
-            
-            self.shapes[-1][0].position_x = x
-            self.shapes[-1][0].position_y = y - 1
-            self.shapes[-1][1].position_x = x - 1
+            self.shapes[-1][0].position_x = x + 1
+            self.shapes[-1][0].position_y = y - 2
+            self.shapes[-1][1].position_x = x + 1
             self.shapes[-1][1].position_y = y - 1
-            self.shapes[-1][2].position_x = x - 2
-            self.shapes[-1][2].position_y = y - 1
-            self.shapes[-1][3].position_x = x
+            self.shapes[-1][2].position_x = x
+            self.shapes[-1][2].position_y = y 
+            self.shapes[-1][3].position_x = x + 1
             self.shapes[-1][3].position_y = y
             
             self.shapes[-1][0].version = 3
@@ -172,14 +171,14 @@ class TetrisWidget(GridLayout):
             if x > 8:
                 x = 8
             
-            self.shapes[-1][0].position_x = x
-            self.shapes[-1][0].position_y = y - 2
-            self.shapes[-1][1].position_x = x
-            self.shapes[-1][1].position_y = y - 1
+            self.shapes[-1][0].position_x = x + 1
+            self.shapes[-1][0].position_y = y - 1
+            self.shapes[-1][1].position_x = x + 1
+            self.shapes[-1][1].position_y = y
             self.shapes[-1][2].position_x = x
-            self.shapes[-1][2].position_y = y 
-            self.shapes[-1][3].position_x = x + 1
-            self.shapes[-1][3].position_y = y - 2
+            self.shapes[-1][2].position_y = y - 1
+            self.shapes[-1][3].position_x = x - 1
+            self.shapes[-1][3].position_y = y - 1
             
             self.shapes[-1][0].version = 4
             
@@ -187,13 +186,13 @@ class TetrisWidget(GridLayout):
             x = self.shapes[-1][0].position_x
             y = self.shapes[-1][0].position_y
             
-            self.shapes[-1][0].position_x = x
-            self.shapes[-1][0].position_y = y + 2
-            self.shapes[-1][1].position_x = x + 1
-            self.shapes[-1][1].position_y = y + 2
-            self.shapes[-1][2].position_x = x + 1
-            self.shapes[-1][2].position_y = y + 1
-            self.shapes[-1][3].position_x = x + 1
+            self.shapes[-1][0].position_x = x - 1
+            self.shapes[-1][0].position_y = y
+            self.shapes[-1][1].position_x = x - 1
+            self.shapes[-1][1].position_y = y + 1
+            self.shapes[-1][2].position_x = x - 1
+            self.shapes[-1][2].position_y = y + 2
+            self.shapes[-1][3].position_x = x 
             self.shapes[-1][3].position_y = y 
             
             self.shapes[-1][0].version = 1
@@ -517,7 +516,7 @@ class TetrisWidget(GridLayout):
                 shape.append(Shape(5, 21, "E", 1, size = (0, 0)))
             
         self.shapes.append(shape)
-            
+                
         self.r = random.randint(1, 7)      
         
     
@@ -542,6 +541,8 @@ class App(BoxLayout):
     
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        
+        self.game_over_state = False
         
         self.orientation = 'horizontal'
         
@@ -583,12 +584,46 @@ class App(BoxLayout):
     
 
     def update(self, dt):
-        if self.tetris.game_speed == 0.1:
-            self.points += 1
-         
-        self.panel.points.text = str(self.points)
-        
-        self.tetris.update_game(self.tetris.width, dt)      
+        if not self.game_over_state:
+            if self.tetris.game_speed == 0.1:
+                self.points += 1
+            
+            self.panel.points.text = str(self.points)
+            
+            self.tetris.update_game(self.tetris.width, dt)   
+            self.is_over()   
         
 
+    def is_over(self):
+        if not self.game_over_state:
+            for i in self.tetris.shapes:
+                for j in i:
+                    if j.position_y > 20 and j.active == False:   
+                        self.remove_widget(self.tetris)  
+                        self.panel.remove_widget(self.panel.block)
+                        self.panel.remove_widget(self.panel.label2)
+                        
+                        self.button = Button(color = (0, 0.25, 0.3, 1),
+                                             background_color = (0.95 ,0.95, 0.95, 0.8),
+                                             size_hint = (0.8, 1.5),
+                                             pos_hint = {"center_x": 0.5},
+                                             font_size = self.height / 10,
+                                             font_name = "label_font.ttf",
+                                             text = "new game",
+                                             background_normal = "",
+                                             on_press = lambda x: self.new_game())
+                
+                        self.panel.add_widget(self.button)
+                        self.panel.add_widget(Label(size_hint = (1, 0.5)))
+                        
+                        self.game_over_state = True
+                        break
+                    
+    
+    def new_game(self):
+        self.remove_widget(self.panel) 
+        self.new_game = App()
+        self.add_widget(self.new_game)
+    
+    
 KivyTetrisApp().run()
