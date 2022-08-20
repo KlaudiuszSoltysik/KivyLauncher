@@ -1,4 +1,3 @@
-#wyświetlać następny klocek, naprawić kolizje z dołem
 from kivy.app import App
 from kivy.uix.button import Button
 from kivy.uix.label import Label
@@ -36,31 +35,30 @@ class Panel(BoxLayout):
         self.orientation = "vertical"
         
         self.label1 = Label(text = "KivyTetris",
-                            font_size = self.height / 2,
+                            font_size = self.height / 3,
                             font_name = "label_font.ttf",
                             color = (0, 0.25, 0.3, 1),
                             bold = True,
                             size_hint = (1, 2))
         
         self.label2 = Label(text = "Next:",
-                            font_size = self.height / 2,
+                            font_size = self.height / 3,
                             font_name = "label_font.ttf",
                             color = (0, 0.25, 0.3, 1),
                             bold = True,
                             size_hint = (1, 1))
         
-        self.block = Label(text = "PLACEHOLDER",
-                            size_hint = (1, 2))
+        self.block = Label(size_hint = (1, 2))
         
         self.label3 = Label(text = "Points:",
-                            font_size = self.height / 2,
+                            font_size = self.height / 3,
                             font_name = "label_font.ttf",
                             color = (0, 0.25, 0.3, 1),
                             bold = True,
                             size_hint = (1, 1))
         
         self.points = Label(text = "pts",
-                            font_size = self.height / 2,
+                            font_size = self.height / 3,
                             font_name = "label_font.ttf",
                             color = (0, 0.25, 0.3, 1),
                             bold = True,
@@ -71,8 +69,60 @@ class Panel(BoxLayout):
         self.add_widget(self.block)
         self.add_widget(self.label3)
         self.add_widget(self.points) 
+        
+        with self.canvas:
+            Color(0, 0.25, 0.3)
+            self.seg1 = Rectangle()
+            self.seg2 = Rectangle()
+            self.seg3 = Rectangle()
+            self.seg4 = Rectangle()
             
 
+    def update(self, r):
+        unit = self.width / 14
+        
+        self.seg1.size = (unit, unit)
+        self.seg2.size = (unit, unit)
+        self.seg3.size = (unit, unit)
+        self.seg4.size = (unit, unit)
+        
+        if r == 1:
+            self.seg1.pos = self.height / 2 + self.width / 2 - unit / 2, self.height / 2 + unit
+            self.seg2.pos = self.height / 2 + self.width / 2 - unit / 2, self.height / 2
+            self.seg3.pos = self.height / 2 + self.width / 2 - unit / 2, self.height / 2 - unit
+            self.seg4.pos = self.height / 2 + self.width / 2 - unit / 2, self.height / 2 - unit * 2
+        elif r == 2:
+            self.seg1.pos = self.height / 2 + self.width / 2 - unit, self.height / 2
+            self.seg2.pos = self.height / 2 + self.width / 2, self.height / 2
+            self.seg3.pos = self.height / 2 + self.width / 2 - unit, self.height / 2 - unit
+            self.seg4.pos = self.height / 2 + self.width / 2, self.height / 2 - unit
+        elif r == 3:
+            self.seg1.pos = self.height / 2 + self.width / 2 - unit, self.height / 2 + unit / 2
+            self.seg2.pos = self.height / 2 + self.width / 2 - unit, self.height / 2 - unit / 2
+            self.seg3.pos = self.height / 2 + self.width / 2 - unit, self.height / 2 - unit * 3 / 2
+            self.seg4.pos = self.height / 2 + self.width / 2, self.height / 2 - unit * 3 / 2
+        elif r == 4:
+            self.seg1.pos = self.height / 2 + self.width / 2, self.height / 2 + unit / 2
+            self.seg2.pos = self.height / 2 + self.width / 2, self.height / 2 - unit / 2
+            self.seg3.pos = self.height / 2 + self.width / 2, self.height / 2 - unit * 3 / 2
+            self.seg4.pos = self.height / 2 + self.width / 2 - unit, self.height / 2 - unit * 3 / 2
+        elif r == 5:
+            self.seg1.pos = self.height / 2 + self.width / 2 - unit, self.height / 2 - unit
+            self.seg2.pos = self.height / 2 + self.width / 2, self.height / 2 - unit
+            self.seg3.pos = self.height / 2 + self.width / 2, self.height / 2
+            self.seg4.pos = self.height / 2 + self.width / 2 + unit, self.height / 2
+        elif r == 6:
+            self.seg1.pos = self.height / 2 + self.width / 2 - unit, self.height / 2 - unit * 3 / 2
+            self.seg2.pos = self.height / 2 + self.width / 2 - unit, self.height / 2 - unit / 2
+            self.seg3.pos = self.height / 2 + self.width / 2, self.height / 2 - unit / 2
+            self.seg4.pos = self.height / 2 + self.width / 2, self.height / 2 + unit / 2
+        elif r == 7:
+            self.seg1.pos = self.height / 2 + self.width / 2 - unit / 2, self.height / 2 + unit / 2
+            self.seg2.pos = self.height / 2 + self.width / 2 - unit / 2, self.height / 2 - unit / 2
+            self.seg3.pos = self.height / 2 + self.width / 2 - unit / 2, self.height / 2 - unit * 3 / 2
+            self.seg4.pos = self.height / 2 + self.width / 2 + unit / 2, self.height / 2 - unit / 2
+
+    
 class TetrisWidget(GridLayout):  
     shapes = []
     game_speed = 0.5
@@ -431,6 +481,7 @@ class TetrisWidget(GridLayout):
                         j.active = False                 
             else:
                 self.new_shape()
+                self.delete_row()
                 return True
     
     
@@ -466,7 +517,41 @@ class TetrisWidget(GridLayout):
         if not self.collisions_left():
             for i in self.shapes[-1]:
                 i.position_x -= 1
+    
+    
+    def delete_row(self):
+        rows = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         
+        for i in self.shapes[0:-1]:
+            for j in i: 
+                rows[j.position_y] += 1
+        
+        for i in range(20):
+            if rows[i] == 10:
+                for j in self.shapes[0:-1]:
+                    for k in j: 
+                        if k.position_y == i:
+                            self.canvas.remove(k)
+                            j.remove(k)
+                for j in self.shapes[0:-1]:
+                    for k in j: 
+                        if k.position_y == i:
+                            self.canvas.remove(k)
+                            j.remove(k)
+                for j in self.shapes[0:-1]:
+                    for k in j: 
+                        if k.position_y == i:
+                            self.canvas.remove(k)
+                            j.remove(k)
+                for j in self.shapes[0:-1]:
+                    for k in j: 
+                        if k.position_y == i:
+                            self.canvas.remove(k)
+                            j.remove(k)
+                        elif k.position_y > i:
+                            k.position_y -= 1
+                self.delete_row()
+                    
                 
     def new_shape(self): 
         shape = []
@@ -516,8 +601,8 @@ class TetrisWidget(GridLayout):
                 shape.append(Shape(5, 21, "E", 1, size = (0, 0)))
             
         self.shapes.append(shape)
-                
-        self.r = random.randint(1, 7)      
+    
+        self.r = random.randint(1, 7)             
         
     
 class Shape(Rectangle):
@@ -590,7 +675,8 @@ class App(BoxLayout):
             
             self.panel.points.text = str(self.points)
             
-            self.tetris.update_game(self.tetris.width, dt)   
+            self.tetris.update_game(self.tetris.width, dt) 
+            self.panel.update(self.tetris.r)  
             self.is_over()   
         
 
@@ -599,31 +685,29 @@ class App(BoxLayout):
             for i in self.tetris.shapes:
                 for j in i:
                     if j.position_y > 20 and j.active == False:   
-                        self.remove_widget(self.tetris)  
-                        self.panel.remove_widget(self.panel.block)
-                        self.panel.remove_widget(self.panel.label2)
-                        
-                        self.button = Button(color = (0, 0.25, 0.3, 1),
-                                             background_color = (0.95 ,0.95, 0.95, 0.8),
-                                             size_hint = (0.8, 1.5),
-                                             pos_hint = {"center_x": 0.5},
-                                             font_size = self.height / 10,
-                                             font_name = "label_font.ttf",
-                                             text = "new game",
-                                             background_normal = "",
-                                             on_press = lambda x: self.new_game())
-                
-                        self.panel.add_widget(self.button)
-                        self.panel.add_widget(Label(size_hint = (1, 0.5)))
-                        
                         self.game_over_state = True
+                        
+                        self.game_over = GameOver()
+                        
+                        self.add_widget(self.game_over)
+                        
+                        self.panel.seg1.size = (0, 0)
+                        self.panel.seg2.size = (0, 0)
+                        self.panel.seg3.size = (0, 0)
+                        self.panel.seg4.size = (0, 0)
                         break
                     
     
     def new_game(self):
-        self.remove_widget(self.panel) 
-        self.new_game = App()
-        self.add_widget(self.new_game)
-    
+        self.remove_widget(self.game_over)
+        self.tetris.clear_widgets()
+        
+        for i in self.tetris.shapes:
+            for j in i:
+                j.size = (0, 0)
+                
+        self.tetris.shapes.clear()
+        self.tetris.__init__()        
+
     
 KivyTetrisApp().run()
