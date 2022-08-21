@@ -623,11 +623,10 @@ class Shape(Rectangle):
     
 class App(BoxLayout):
     points = 0
+    game_over_state = False
     
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        
-        self.game_over_state = False
         
         self.orientation = 'horizontal'
         
@@ -701,13 +700,12 @@ class App(BoxLayout):
     def new_game(self):
         self.remove_widget(self.game_over)
         self.tetris.clear_widgets()
-        
-        for i in self.tetris.shapes:
-            for j in i:
-                j.size = (0, 0)
-                
         self.tetris.shapes.clear()
-        self.tetris.__init__()        
+        self.tetris.canvas.clear()
+        self.tetris.__init__() 
+        
+        self.game_over_state = False
+        self.points = 0
 
     
 KivyTetrisApp().run()
